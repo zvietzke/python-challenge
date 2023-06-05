@@ -1,29 +1,34 @@
 import os
 import csv
-#initialize variables
+
 row_count = 0
 total = 0
+votes = {}
 
 
-infile = os.path.join('Rescources','election_data.csv')
-outfile = os.path.join('analysis','budget_analysis.txt')
+infile = os.path.join('Resources','election_data.csv')
+outfile = os.path.join('analysis','election_data.txt')
 
 with open(infile, 'r') as file_read:
         csv_reader = csv.reader(file_read)
         next(csv_reader)
-        first = next(csv_reader)
         
-
-
-
-
-          
+        for row in csv_reader:
+            name = row[2]
+            if name in votes:
+                 votes[name] += 1
+            else:
+                votes[name] = 1
+            total += 1
+        
+winner = max(votes)
 
 
 output = (
     f"Election Results\n"
     f"-------------------------\n"
-    f"\n"
+    f"Total votes: {total}\n"
+    f"winner: {winner}\n"
 
 )
 
