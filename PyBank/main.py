@@ -9,15 +9,16 @@ l_greatest_inc = ["",0]
 l_greatest_dec = ["",999999]
 
 
+
 infile = os.path.join('Resources','budget_data.csv')
 outfile = os.path.join('analysis','budget_analysis.txt')
 
-with open(infile,'r') as file_read:
+with open(infile,'r',encoding ='UTF-8') as file_read:
         csv_reader = csv.reader(file_read)
         next(csv_reader)
         first = next(csv_reader)
         row_count += 1
-        total =+ int(first[1])
+        total += int(first[1])
         previous = int(first[1])
 
         for row in csv_reader:
@@ -25,23 +26,28 @@ with open(infile,'r') as file_read:
             row_count += 1
             total += value
             net_change = value - previous
-            l_netchange += [net_change]
-            #append the current month to month list month_change[]
-            previous = int(row[1])
-
+            l_netchange.append(net_change)
+            month_change.append(row[0])
+            previous = value
             #two if statements to compare the next change, once for greatest increase, once for greatest decrease
+            
+            if net_change > l_greatest_inc[1]:
+                    l_greatest_inc = [row[0], net_change]
 
+            if net_change < l_greatest_dec[1]:
+                  l_greatest_dec = [row[0], net_change]
+#function to get net monthly average     
 
-
-
-#function to get net monthly average          
-
+avg_change = sum(l_netchange) / len(l_netchange)
 
 output = (
     f"Financial Analysis\n"
     f"-----------------------\n"
     f"Total months = {row_count}\n"
     f"total: ${total}\n"
+    f"Average Change: ${avg_change}\n"
+    f"Greatest Increasse in Profits: {l_greatest_inc[0]} (${l_greatest_inc[1]})\n"
+    f"Greatest Decrease in Profits: {l_greatest_dec[0]} (${l_greatest_dec[1]})\n"
 )
 
 print(output)
